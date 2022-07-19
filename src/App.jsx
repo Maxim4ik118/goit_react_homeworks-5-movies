@@ -70,13 +70,13 @@ const AppLayout = ({
     <div className="app">
       <header className="header">
         <nav className="nav">
-          <Link to="/">Home</Link>
+          <Link to="/goit-react-hw-05-movies">Home</Link>
           <Link to="/movies">Movies</Link>
         </nav>
       </header>
       <Routes>
         <Route
-          path="/"
+          path="/goit-react-hw-05-movies"
           element={
             <HomePage movies={movies} isFetching={isFetching} error={error} />
           }

@@ -47,7 +47,7 @@ const MovieDetails = () => {
       return;
     } 
 
-    navigate('/');
+    navigate('/goit-react-hw-05-movies');
   };
 
   return (

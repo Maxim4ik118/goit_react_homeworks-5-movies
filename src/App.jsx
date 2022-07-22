@@ -3,42 +3,33 @@ import { Routes, Route, Link, useSearchParams } from 'react-router-dom';
 
 import { HomePage, MovieDetails, Movies } from 'pages';
 
+import { useFetch } from './hooks/useFetch';
 import { fetchMovieBySearch, fetchMovies } from 'services/api';
 
 const App = () => {
-  const [movies, setMovies] = useState([]);
   const [moviesBySearch, setMoviesBySearch] = useState([]);
-  const [error, setError] = useState('');
-  const [isFetching, setIsFetching] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isFetching, data, error, fetchData } = useFetch();
+
+  const movies = data?.results;
+
   const query = searchParams.get('query');
+
+  useEffect(() => {
+    fetchData(fetchMovies());
+  }, [fetchData]);
 
   useEffect(() => {
     if (!query) return;
 
-    requestMovies(query);
-  }, [query]);
+    fetchData(fetchMovieBySearch(query));
+  }, [query, fetchData]);
 
   useEffect(() => {
-    requestMovies();
-  }, []);
+    if (!query || !data?.results?.length) return;
 
-  const requestMovies = async (searchTerm = '') => {
-    try {
-      setIsFetching(true);
-      if (searchTerm.length === 0) {
-        const { results } = await fetchMovies();
-        setMovies(results);
-      } else {
-        const { results } = await fetchMovieBySearch(searchTerm);
-        setMoviesBySearch(results);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsFetching(false);
-    }
-  };
+    setMoviesBySearch(data.results);
+  }, [data, query]);
 
   const handleSubmitSearchTerm = term => {
     setSearchParams({ query: term });

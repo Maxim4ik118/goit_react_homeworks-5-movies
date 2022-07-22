@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { MoviesGallery, Searchbar } from 'components';
 
-function Movies({ onSubmit, error, isFetching, movies }) {
+function Movies({ onSubmit, error, isFetching, movies = [] }) {
   return (
     <>
       <Searchbar onSubmit={onSubmit} />

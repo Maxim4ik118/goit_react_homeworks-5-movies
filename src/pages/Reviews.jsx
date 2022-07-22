@@ -1,35 +1,22 @@
 import { Loader } from 'components';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useFetch } from 'hooks/useFetch';
 import { fetchMovieReviews } from 'services/api';
 
 import { StyledReviews } from './Styled';
 
 function Reviews() {
-  const [reviews, setReviews] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState(null);
-
+  const { isFetching, data, error, fetchData } = useFetch();
+  const reviews = data?.results;
   let { movieId } = useParams();
 
   useEffect(() => {
-    requestReviews(movieId);
-  }, []);
+    if (!movieId) return;
 
-  const requestReviews = async movieId => {
-    try {
-      setIsFetching(true);
-
-      const { results } = await fetchMovieReviews(movieId);
-
-      setReviews(results);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsFetching(false);
-    }
-  };
+    fetchData(fetchMovieReviews(movieId));
+  }, [fetchData, movieId]);
 
   return (
     <StyledReviews>

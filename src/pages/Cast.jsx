@@ -1,40 +1,31 @@
 import { Loader } from 'components';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useFetch } from 'hooks/useFetch';
 import { fetchMovieCast } from 'services/api';
 
 import { StyledCast } from './Styled';
 
 function Cast() {
-  const [castData, setCastData] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState(null);
-
+  const { isFetching, data, error, fetchData } = useFetch();
+  const castData = data?.cast;
   let { movieId } = useParams();
 
   useEffect(() => {
-    requestCast(movieId);
-  }, []);
+    if (!movieId) return;
 
-  const requestCast = async movieId => {
-    try {
-      setIsFetching(true);
-
-      const { cast } = await fetchMovieCast(movieId);
-
-      setCastData(cast);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsFetching(false);
-    }
-  };
+    fetchData(fetchMovieCast(movieId));
+  }, [fetchData, movieId]);
 
   return (
     <StyledCast>
       {error && <p>{error.message}</p>}
-      {isFetching && <div><Loader /></div>}
+      {isFetching && (
+        <div>
+          <Loader />
+        </div>
+      )}
       {!!castData && !isFetching && (
         <ul>
           {castData.length > 0 &&

@@ -26,7 +26,7 @@ export const StyledCast = styled.div`
     .cast-item {
       text-align: left;
       img {
-        max-width: 150px;
+        mzoax-width: 150px;
       }
       p {
         margin-top: 5px;

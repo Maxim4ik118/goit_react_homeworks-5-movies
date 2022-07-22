@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { MoviesGallery } from 'components';
 
-function HomePage({ error, isFetching, movies }) {
+function HomePage({ error, isFetching, movies = [] }) {
   return (
     <div>
       Homapage

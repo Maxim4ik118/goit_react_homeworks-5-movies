@@ -1,5 +1,6 @@
 import { Loader } from 'components';
-import { Suspense, useEffect, useState } from 'react';
+import { useFetch } from 'hooks/useFetch';
+import { Suspense, useEffect } from 'react';
 import {
   useParams,
   useLocation,
@@ -17,35 +18,24 @@ import {
 } from './Styled';
 
 const MovieDetails = () => {
-  const [movieDetails, setMovieDetails] = useState(null);
-  const [error, setError] = useState('');
-  const [isFetching, setIsFetching] = useState(false);
+  const { isFetching, data, error, fetchData } = useFetch();
+  const movieDetails = data;
 
   const location = useLocation();
   const navigate = useNavigate();
   const { movieId } = useParams();
 
   useEffect(() => {
-    requestMovieById(movieId);
-  }, []);
+    if (!movieId) return;
 
-  const requestMovieById = async movieId => {
-    try {
-      setIsFetching(true);
-      const data = await fetchMovieById(movieId);
-      setMovieDetails(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsFetching(false);
-    }
-  };
+    fetchData(fetchMovieById(movieId));
+  }, [fetchData, movieId]);
 
   const handleMoveBack = () => {
     if (location.state) {
       navigate(location.state.from);
       return;
-    } 
+    }
 
     navigate('/goit-react-hw-05-movies');
   };
@@ -72,13 +62,15 @@ const MovieDetails = () => {
               <h2>Overview</h2>
               <p> {movieDetails.overview}</p>
               <h3>Genres:</h3>
-              {movieDetails.genres.map(({ id, name }) => {
-                return (
-                  <span className="genre" key={id}>
-                    {name}
-                  </span>
-                );
-              })}
+              {movieDetails?.genres?.length > 0
+                ? movieDetails.genres.map(({ id, name }) => {
+                    return (
+                      <span className="genre" key={id}>
+                        {name}
+                      </span>
+                    );
+                  })
+                : 'There are no genres available'}
             </div>
           </StyledMovieDetailsMeta>
         </>
@@ -88,14 +80,14 @@ const MovieDetails = () => {
           <Link
             className="link"
             to="cast"
-            state={{ from: location.state.from }}
+            state={{ from: location.state?.from }}
           >
             Cast
           </Link>
           <Link
             className="link"
             to="reviews"
-            state={{ from: location.state.from }}
+            state={{ from: location.state?.from }}
           >
             Reviews
           </Link>

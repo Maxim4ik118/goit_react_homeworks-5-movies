@@ -5,11 +5,12 @@ export const useFetch = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
 
-  const fetchData = useCallback(async (url, body = {}) => {
+  const fetchData = useCallback(async (requestFunction) => {
     setIsFetching(true);
     try {
-      const response = await fetch(url, body);
-      const data = await response.json();
+      const data = await requestFunction;
+      // const response = await fetch(url, body);
+      // const data = await response.json();
 
       setData(data);
     } catch (e) {

@@ -9,7 +9,7 @@ import {
   Link,
 } from 'react-router-dom';
 
-import { fetchMovieById } from 'services/api';
+import { MoviesAPI } from 'services/api';
 
 import {
   StyledMovieAdditionalInfo,
@@ -28,7 +28,7 @@ const MovieDetails = () => {
   useEffect(() => {
     if (!movieId) return;
 
-    fetchData(fetchMovieById(movieId));
+    fetchData(MoviesAPI.fetchMovieById(movieId));
   }, [fetchData, movieId]);
 
   const handleMoveBack = () => {

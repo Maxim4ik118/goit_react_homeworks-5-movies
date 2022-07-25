@@ -1,30 +1,34 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { useFetch } from 'hooks/useFetch';
+// import { fetchMovieBySearch } from 'services/api';
+import { MoviesAPI } from 'services/api';
 
 import { MoviesGallery, Searchbar } from 'components';
 
-function Movies({ onSubmit, error, isFetching, movies = [] }) {
+function Movies() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { isFetching, data, error, fetchData } = useFetch();
+  const query = searchParams.get('query');
+
+  useEffect(() => {
+    if (!query) return;
+
+    fetchData(MoviesAPI.fetchMovieBySearch(query));
+  }, [query, fetchData]);
+
+  const handleSubmitSearchTerm = term => {
+    setSearchParams({ query: term });
+  };
+
+  const movies = data?.results;
   return (
     <>
-      <Searchbar onSubmit={onSubmit} />
+      <Searchbar onSubmit={handleSubmitSearchTerm} />
       <MoviesGallery error={error} isFetching={isFetching} movies={movies} />
     </>
   );
 }
-
-Movies.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  error: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      original_title: PropTypes.string,
-      overview: PropTypes.string,
-      vote_average: PropTypes.number,
-      poster_path: PropTypes.string,
-    })
-  ).isRequired,
-};
 
 export default Movies;

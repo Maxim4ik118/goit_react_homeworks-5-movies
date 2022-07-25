@@ -1,9 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+
+import { useFetch } from 'hooks/useFetch';
+import { MoviesAPI } from 'services/api';
+
 
 import { MoviesGallery } from 'components';
 
-function HomePage({ error, isFetching, movies = [] }) {
+function HomePage() {
+  const { isFetching, data, error, fetchData } = useFetch();
+  
+  useEffect(() => {
+    fetchData(MoviesAPI.fetchMovies());
+  }, [fetchData]);
+
+  const movies = data?.results;
+
   return (
     <div>
       Homapage
@@ -11,18 +22,5 @@ function HomePage({ error, isFetching, movies = [] }) {
     </div>
   );
 }
-
-HomePage.propTypes = {
-  error: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({ 
-        id: PropTypes.number,
-        original_title: PropTypes.string,
-        overview: PropTypes.string,
-        vote_average: PropTypes.number,
-        poster_path: PropTypes.string,
-    })).isRequired,
-};
 
 export default HomePage;

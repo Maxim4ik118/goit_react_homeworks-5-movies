@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useFetch } from 'hooks/useFetch';
-import { fetchMovieReviews } from 'services/api';
+import { MoviesAPI } from 'services/api';
 
 import { StyledReviews } from './Styled';
 
@@ -15,7 +15,7 @@ function Reviews() {
   useEffect(() => {
     if (!movieId) return;
 
-    fetchData(fetchMovieReviews(movieId));
+    fetchData(MoviesAPI.fetchMovieReviews(movieId));
   }, [fetchData, movieId]);
 
   return (

@@ -12,12 +12,12 @@ const App = () => {
     <div className="app">
       <header className="header">
         <nav className="nav">
-          <Link to="/goit-react-hw-05-movies">Home</Link>
+          <Link to="/">Home</Link>
           <Link to="/movies">Movies</Link>
         </nav>
       </header>
       <Routes>
-        <Route path="/goit-react-hw-05-movies" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/movies/:movieId" element={<MovieDetails />}>
           <Route path="cast" element={<LazyCast />} />

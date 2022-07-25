@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useFetch } from 'hooks/useFetch';
-// import { fetchMovieBySearch } from 'services/api';
 import { MoviesAPI } from 'services/api';
 
 import { MoviesGallery, Searchbar } from 'components';

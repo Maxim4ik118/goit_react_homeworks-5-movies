@@ -1,21 +1,28 @@
-import { Loader } from 'components';
+import { lazy } from 'react';
 import { useFetch } from 'hooks/useFetch';
 import { Suspense, useEffect } from 'react';
 import {
   useParams,
   useLocation,
   useNavigate,
-  Outlet,
   Link,
+  Routes,
+  Route,
 } from 'react-router-dom';
 
 import { MoviesAPI } from 'services/api';
+
+import { Loader } from 'components';
 
 import {
   StyledMovieAdditionalInfo,
   StyledMovieDetails,
   StyledMovieDetailsMeta,
 } from './Styled';
+
+const LazyCast = lazy(() => import('../pages/Cast'));
+
+const LazyReviews = lazy(() => import('../pages/Reviews'));
 
 const MovieDetails = () => {
   const { isFetching, data, error, fetchData } = useFetch();
@@ -93,7 +100,10 @@ const MovieDetails = () => {
           </Link>
         </div>
         <Suspense fallback={<Loader />}>
-          <Outlet />
+          <Routes>
+            <Route path="cast" element={<LazyCast />} />
+            <Route path="reviews" element={<LazyReviews />} />
+          </Routes>
         </Suspense>
       </StyledMovieAdditionalInfo>
     </StyledMovieDetails>

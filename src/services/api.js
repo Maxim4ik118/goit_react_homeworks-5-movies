@@ -25,7 +25,7 @@ export const MoviesAPI = {
   },
   async fetchMovieReviews (movieId)  {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie//${movieId}/reviews?api_key=${process.env.REACT_APP_THEMOVIE_API_KEY}&language=en-US&page=1`
+      `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${process.env.REACT_APP_THEMOVIE_API_KEY}&language=en-US&page=1`
     );
     return await response.json();
   },

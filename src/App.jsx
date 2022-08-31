@@ -1,10 +1,12 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 
-import { HomePage, MovieDetails, Movies } from 'pages';
+import { Loader } from 'components';
+// import { HomePage, MovieDetails, Movies } from 'pages';
 
-// const LazyCast = lazy(() => import('./pages/Cast'));
-
-// const LazyReviews = lazy(() => import('./pages/Reviews'));
+const LazyHomePage = lazy(() => import('./pages/HomePage'));
+const LazyMovies = lazy(() => import('./pages/Movies'));
+const LazyMovieDetails = lazy(() => import('./pages/MovieDetails'));
 
 const App = () => {
   return (
@@ -15,11 +17,13 @@ const App = () => {
           <Link to="/movies">Movies</Link>
         </nav>
       </header>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/movies/:movieId/*" element={<MovieDetails />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<LazyHomePage />} />
+          <Route path="/movies" element={<LazyMovies />} />
+          <Route path="/movies/:movieId/*" element={<LazyMovieDetails />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };

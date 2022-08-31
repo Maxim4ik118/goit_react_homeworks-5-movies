@@ -9,7 +9,7 @@ import { MoviesGallery, Searchbar } from 'components';
 function Movies() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isFetching, data, error, fetchData } = useFetch();
-  const query = searchParams.get('query');
+  const query = searchParams.get('query'); // ?query=rush+hour -> "rush hour"
 
   useEffect(() => {
     if (!query) return;
@@ -17,8 +17,8 @@ function Movies() {
     fetchData(MoviesAPI.fetchMovieBySearch(query));
   }, [query, fetchData]);
 
-  const handleSubmitSearchTerm = term => {
-    setSearchParams({ query: term });
+  const handleSubmitSearchTerm = query => {
+    setSearchParams({ query: query });
   };
 
   const movies = data?.results;
